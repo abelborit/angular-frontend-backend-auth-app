@@ -4,8 +4,8 @@
 
 ### \* PASOS A REALIZAR:
 
-1. Colocar en la terminal: `docker compose up -d` para correr la configuración del archivo docker-compose.yml
-2. ejemplo
+1. Colocar en la terminal `npm run start:dev` para levantar la aplicación del backend de Nest
+2. Colocar en la terminal `docker compose up -d` para correr la configuración del archivo docker-compose.yml
 
 ### \* NOTAS:
 
