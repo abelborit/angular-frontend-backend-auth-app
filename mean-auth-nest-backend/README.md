@@ -1,3 +1,24 @@
+# Nest - Angular Frontend Backend Auth App
+
+---
+
+### \* PASOS A REALIZAR:
+
+1. Colocar en la terminal: `docker compose up -d` para correr la configuración del archivo docker-compose.yml
+2. ejemplo
+
+### \* NOTAS:
+
+- ¿Cuál es el motivo de los interceptores?
+
+  - Los interceptores son utilizados para realizar tareas comunes y genéricas en las solicitudes HTTP, como añadir encabezados, manejar errores o realizar transformaciones en los datos de la respuesta. Aunque la solicitud pueda estar inicialmente configurada como se desea, los interceptores permiten agregar funcionalidades adicionales en todas las solicitudes o respuestas de manera centralizada, lo que mejora la modularidad y mantenibilidad del código al evitar la repetición de lógica en varios lugares.
+
+  - Un ejemplo de uso de interceptores sería el de agregar un encabezado de autenticación a todas las solicitudes HTTP salientes. Supongamos que tienes un token de autenticación que debe ser enviado en cada solicitud. En lugar de añadir manualmente ese encabezado en cada solicitud, puedes crear un interceptor que lo haga automáticamente por ti. Esto simplifica tu código y garantiza que todas las solicitudes tengan el encabezado de autenticación adecuado, sin importar en qué parte de tu aplicación se realicen las llamadas HTTP.
+
+- ejemplo
+
+---
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
