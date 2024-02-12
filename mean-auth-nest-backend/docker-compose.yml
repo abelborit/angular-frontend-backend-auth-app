@@ -1,0 +1,27 @@
+# *** Configuración básica para realizar una instalación y montaje de MongoDB por defecto en la laptop o pc mediante Docker ***
+# para correr toda esta configuración hay que colocar en la terminal "docker compose up -d" o sino también en una terminal aparte colocar "docker compose up"
+# docker compose -> comando para ejecutar este archivo de docker-compose.yml y lo buscará en la carpeta en donde me encuentro
+# up -> leer, montar y seguir las instrucciones y configuraciones que hay en este archivo de docker compose
+# -d -> para que lo haga de forma desenlazada a la terminal, es decir, para que podamos cerrar la terminal y el proceso siga ejecutándose
+# ------------------------------------------------------------------------------------------------------------------------
+
+# versión del docker compose según el standard que nosotros queremos usar
+version: '3'
+
+# definir servicios que son los nombres de todos los contenedores
+services:
+  # aquí colocamos el nombre de database pero se puede colocar cualquier otro nombre
+  database:
+    # nombre del contenedor según nuestra preferencia
+    container_name: mean-mongo-db
+    # la imagen a utilizar de https://hub.docker.com/_/mongo y solo es necesario colocar el nombre pero es buena práctica colocar también la versión que queremos utilizar
+    image: mongo:5.0.16
+    # la información que mi base de datos va a guardar queremos que sea persistente en la computadora (cuando se despliegue a un sitio web la base de datos también la vamos a configurar de otra manera) y la base de datos que tenga en internet será una y la base de datos que se tenga en la computadora será otra y así yo puedo borrar, eliminar, construir de nuevo, etc ya que todo eso sería de forma local y no se vería afectada mi base de datos de producción y ese es otro beneficio de trabajar con Docker y para eso vamos a usar volumes
+    volumes:
+      # hacer un mapeo de la carpeta ./mongo en mi proyecto y si no existe entonces la va a crear donde ./ hace referencia al path relativo donde se encuentra el docker-compose.yml y va a mapear esa carpeta con /data/db ya que la imagen de mongo en la versión 5.0.16 -> mongo:5.0.16 guarda la base de datos y sus configuraciones, etc. en ese directorio entonces si básicamente se mueve ese directorio de /data/db esa es la base de datos propiamente de mongo, es decir, la data que estamos grabando.
+      - ./mongo:/data/db
+    # las imágenes por defecto cuando las mandamos a correr o ejecutar, estas se montan en un objeto o elemento llamado contenedor y este contenedor es un máquina virtual hermética donde nada sale y nada entra y todo está funcionando en esa máquina virtual pero como usualmente queremos comunicar nuestro frontend o nuestro backend a la base de datos entonces para eso usaremos los puertos ya que estos los vamos a habilitar para la comunicación donde por ejemplo al trabajar con MongoDB el puerto por defecto que usa es el 27017 entonces ese es el puerto que quiero exponer donde al usar la sintaxis de puerto:puerto como en este caso de 27017:27017 quiere decir que Docker mapee el puerto 27017 de mi equipo con el puerto 27017 del contenedor y este es el único medio de comunicación que vamos a tener con el contenedor
+    ports:
+      - 27017:27017
+    # para que cada vez que se reinicie docker desktop entonces la base datos ya automáticamente esté arriba
+    restart: always
