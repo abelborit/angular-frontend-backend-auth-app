@@ -32,4 +32,8 @@
 
   - Ahora, para corroborar que todo está funcionando (muy aparte de ver el color verde en Docker Desktop) hay que ir a Mongo Compass y en la URI colocar `mongodb://localhost:27017` (puede ser que ya está colocado al momento de abrir Mongo Compass) y luego hay que conectar y con eso ya estaríamos conectados a la base de datos.
 
+- Para conectar Nest con nuestra base de datos que en este caso sería MongoDB seguiremos esta documentación https://docs.nestjs.com/techniques/mongodb
+  - `npm i @nestjs/mongoose mongoose` donde mongoose es la url para poder trabajar con Mongo fácilmente, es decir, no vamos a usar querys sino vamos a utilizar métodos por ejemplo de traer todos los usuarios que coincidan con un correo electrónico X. En pocas palabras es un forma fácil de poder trabajar con la base de datos sin escribir querys (aunque también si deseamos lo podemos hacer con querys)
+  - NOTA: estamos usando variables de entorno entonces para usarlas debemos instalar `npm i @nestjs/config` y una vez que coloquemos `ConfigModule.forRoot(),` en los imports de app.module.ts ya tenemos la configuración para colocar variables de entorno. (puede que sea necesario bajar la terminal y volverla a levantar para que tome los últimos cambios de las variables de entorno)
+
 ### - Angular (Frontend)
