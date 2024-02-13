@@ -47,4 +47,23 @@
 
 - Ahora tenemos que empezar a trabajar la estructura de cómo queremos grabar nuestra data y para eso lo haremos mediante `entidades` o `entities`. El concepto de una entidad está bien relacionado al nombre de la tabla donde nosotros vamos a grabar e insertar registros. En la entidad de auth.entity.ts la re-nombraremos a user.entity.ts y su clase en vez de Auth ahora será User, luego crearemos el esquema/schema y sus propiedades que usaremos en la base de datos y al finalizar todo iremos a Mongo Compass y recargaremos la interfaz gráfica y técnicamente tendría que aparecer la nueva base de datos que creamos (puede ser que no aparezca nada aún ni al refrescar la interfaz gráfica pero al momento de ya insertar datos en base de datos ya tendría que sí o sí aparecer)
 
+- Dentro de Nest hay un concepto que ya forma de él hace mucho tiempo, casi desde sus raíces, que son los DTO (Data Transfer Object) Los DTO son, por ejemplo, al estar haciendo una petición POST y enviar data desde el frontend al backend, esa data viene a ser atrapado en Nest mediante los DTO. Entonces la idea de los DTO es decirle a Nest o que Nest tenga una manera de saber qué data esperar. Si se estuviera trabajando con Express directamente se tendrían que hacer todas las validaciones manualmente, las configuraciones manualmente y los middleware necesarios para saber qué data esperar.
+
+  - NOTA:
+
+    - Middleware: es todo software que se sitúa entre el sistema operativo y las aplicaciones que corren sobre él. Este funciona como una capa de traducción que posibilita la comunicación y la administración de datos en aplicaciones distribuidas.
+
+    - Aplicaciones distribuidas: aplicaciones con distintos componentes que se ejecutan en entornos separados que normalmente en diferentes plataformas conectadas a través de una red.
+
+  - Ahora hay que configurar los DTO para recibir la data correcta desde mi frontend al backend pero para eso hay que hacer validaciones y es necesario instalar `npm i class-validator class-transformer` y también hay que hacer una configuración global main.ts:
+
+  ```ts
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    })
+  );
+  ```
+
 ### - Angular (Frontend)
