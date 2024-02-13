@@ -14,6 +14,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 @Schema()
 export class User {
   /* NOTA: mongo creará automáticamente el _id de tipo string, es decir _id: string */
+  /* aquí se está colocando solo la propiedad para que al momento de registrar no nos marque un error ya que al final de cuentas mongo creará el _id */
+  _id?: string;
 
   @Prop({ unique: true, required: true })
   email: string;

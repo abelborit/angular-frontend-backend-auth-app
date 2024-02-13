@@ -13,6 +13,8 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { User } from './entities/user.entity';
 import { LoginDto } from './dto/login.dto';
 import { JwtPayload } from './interfaces/jwt-payload';
+import { LoginResponse } from './interfaces/login-response';
+import { RegisterUserDto } from './dto/register-user.dto';
 
 /* nuesto auth.service.ts tendría que hacer todo el trabajo de crear usuarios, verificar el login, verificar el JWT (Json Web Token), etc., es decir, tener la lógica de negocio centralizada en este servicio y que nuestro controlador sea quien llame a estos métodos */
 @Injectable()
@@ -60,8 +62,29 @@ export class AuthService {
     }
   }
 
+  async register(registerUserDto: RegisterUserDto): Promise<LoginResponse> {
+    /* darse cuenta que el método create() acepta normal al registerUserDto porque al final de cuentas, en este caso, registerUserDto es igual a createUserDto y entonces registerUserDto tiene todo lo necesario para que create() lo pueda aceptar */
+    /* FORMA 1: registerUserDto cumple todo lo necesario para ser igual a createUserDto */
+    const userToRegister = await this.create(registerUserDto);
+    // console.log({ userToRegister });
+
+    /* en caso no lo acepte entonces hay que hacer un poco de refactorización en este código, por ejemplo, extraer solos las propiedades que se necesiten */
+    /* FORMA 2: registerUserDto NO cumple todo lo necesario para ser igual a createUserDto y hay que mandar solo lo que se necesita */
+    // const user = await this.create({
+    //   email: registerUserDto.email,
+    //   name: registerUserDto.name,
+    //   password: registerUserDto.password,
+    // });
+
+    /* aquí nos aparecerá un problema al querer usar el .id o el ._id ya que no aparece la propiedad pero nosotros sabemos que userToRegister es de tipo User y ese es un usuario que se crea en la base de datos entonces sí o sí vendrá el _id porque mongo lo crea por nosotros. Entonces para hacer una solución rápida en user.entity.ts crearemos la propiedad de _id?: string pero será como opcional porque al final de cuentas MongoDB creará ese _id por nosotros */
+    return {
+      user: userToRegister,
+      token: this.getJsonWebToken({ id: userToRegister._id }),
+    };
+  }
+
   /* este login debería retornar el usuario y el token de acceso que será un JWT */
-  async login(loginDto: LoginDto) {
+  async login(loginDto: LoginDto): Promise<LoginResponse> {
     // console.log(loginDto);
 
     /* encontrar el usuario según el correo electrónico */
