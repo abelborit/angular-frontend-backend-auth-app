@@ -16,7 +16,9 @@
 
   - Un ejemplo de uso de interceptores sería el de agregar un encabezado de autenticación a todas las solicitudes HTTP salientes. Supongamos que tienes un token de autenticación que debe ser enviado en cada solicitud. En lugar de añadir manualmente ese encabezado en cada solicitud, puedes crear un interceptor que lo haga automáticamente por ti. Esto simplifica tu código y garantiza que todas las solicitudes tengan el encabezado de autenticación adecuado, sin importar en qué parte de tu aplicación se realicen las llamadas HTTP.
 
-- ejemplo
+- Diferencias entre mandar form-data vs x-www-form-urlencoded: se hicieron en ambos formatos en el body en Postman y la validación de los parametros que no existen no se aplica en el formato form-data, pero en x-www-form-urlencoded si dice que X parámetro no debe existir. ¿No debería aplicar las validaciones para todos los formatos como FormData, raw, etc?
+
+  - La diferencia entre enviar datos en formato form-data y x-www-form-urlencoded radica en cómo se estructuran y envían los datos al servidor. Cuando se usa form-data, los datos se envían en un formato similar a un objeto FormData, lo que puede no activar ciertas validaciones de parámetros no existentes en el servidor. Por otro lado al usar x-www-form-urlencoded serializa los datos como una cadena codificada, lo que puede permitir al servidor aplicar las validaciones de parámetros de manera más efectiva. Las diferencias en la estructura de datos pueden llevar a que ciertas validaciones no se apliquen de la misma manera en ambos formatos, lo que podría explicar la disparidad y diferencia en la detección de parámetros no existentes.
 
 ---
 
