@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -9,6 +10,7 @@ import * as bcryptjs from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { User } from './entities/user.entity';
+import { LoginDto } from './dto/login.dto';
 
 /* nuesto auth.service.ts tendría que hacer todo el trabajo de crear usuarios, verificar el login, verificar el JWT (Json Web Token), etc., es decir, tener la lógica de negocio centralizada en este servicio y que nuestro controlador sea quien llame a estos métodos */
 @Injectable()
@@ -52,6 +54,40 @@ export class AuthService {
       }
       throw new InternalServerErrorException('Something happen!');
     }
+  }
+
+  /* este login debería retornar el usuario y el token de acceso que será un JWT */
+  async login(loginDto: LoginDto) {
+    // console.log(loginDto);
+
+    /* encontrar el usuario según el correo electrónico */
+    const user = await this.userModel.findOne({ email: loginDto.email });
+    // console.log(user);
+
+    /* validar si existe el usuario según el email */
+    if (!user) {
+      throw new UnauthorizedException('Not valid credentials - email');
+    }
+
+    /* validar si existe la contraseña que se le está mandando desde el frontend vs la contraseña de la base de datos (la contraseña de la base de datos está encriptada) */
+    if (!bcryptjs.compareSync(loginDto.password, user.password)) {
+      throw new UnauthorizedException('Not valid credentials - password');
+    }
+
+    const { password: _, ...userData } = user.toJSON();
+
+    /* FORMA 1: para tener de forma directa las propiedades del userData */
+    // return {
+    //   ...userData,
+    //   token: 'ABC-123',
+    // };
+
+    /* FORMA 2: para tener agrupada las propiedades de userData en una propiedad user */
+    return {
+      user: userData,
+      token: 'ABC-123',
+    };
+    // return 'All Success!!';
   }
 
   findAll() {

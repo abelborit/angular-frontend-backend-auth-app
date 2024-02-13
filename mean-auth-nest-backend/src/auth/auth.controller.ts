@@ -10,6 +10,7 @@ import {
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { LoginDto } from './dto/login.dto';
 
 /* los controladores que son los responsables de escuchar las peticiones que tenemos como GET, POST, PUT, PATCH, DELETE y emitir una respuesta */
 /* la url a utilizar aquí sería localhost:3000/auth */
@@ -28,6 +29,14 @@ export class AuthController {
     /* cuando se mande de forma correcta como por ejemplo { name: 'Nombre', email: 'correo@correo.com', password: '123456' } entonces el backend nos dará como respuesta lo que haya en el servicio en el método create que es en este caso ``This action adds a new auth`` */
 
     return this.authService.create(createUserDto);
+  }
+
+  /* así como para crear un usuario se creó un DTO llamado CreateUserDto entonces para este login también se debe crear un DTO para saber cómo es la data que se espera recibir. La URL será localhost:3000/auth/login y por eso se coloca '/login' ya que en el controlador está el 'auth' -> @Controller('auth') */
+  @Post('/login')
+  login(@Body() loginDto: LoginDto) {
+    // console.log(loginDto);
+
+    return this.authService.login(loginDto);
   }
 
   @Get()
