@@ -68,4 +68,6 @@
 
 - Ahora toca crear un registro de la base de datos y para eso tenemos que hacer la inyección de nuestro modelo en el servicio, en este caso será en auth.service.ts, para poder trabajar con la base de datos y hacer su registro correspondiente. Darse cuenta que si se manda un usuario y luego se quiere volver a mandar el mismo usuario nos dará un error similar a `[Nest] 21364  - 13/02/2024, 10:50:03   ERROR [ExceptionsHandler] E11000 duplicate key error collection: mean-mongo-database.users index: email_1 dup key: { email: "correo@correo.com" }` ya que hicimos validaciones de que el correo sea único pero ese es un error mandado por defecto desde nuestro backend porque todavía al crear el usuario hay que hacer varias cosas como encriptar la contraseña, guardar el usuario, generar el JWT, manejar los errores, etc. y si hay algún error entonces poderlo manejar y que sea un error controlado.
 
+- Para encriptar contraseñas será usando un hash de una sola vía para hacer imposible la reconstrucción del valor que se tiene al encriptar al valor plano de la contraseña como tal entonces tenemos que instalar un paquete `npm i bcryptjs` el cual no está escrito en TypeScript pero nos da la posibilidad de instalar su archivo de denifición `npm i --save-dev @types/bcryptjs`.
+
 ### - Angular (Frontend)

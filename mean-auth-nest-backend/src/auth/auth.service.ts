@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import * as bcryptjs from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { User } from './entities/user.entity';
@@ -18,18 +19,31 @@ export class AuthService {
     @InjectModel(User.name) private userModel: Model<User>,
   ) {}
 
-  /* se podría colocar async create().... y luego en el return colocar return await ..... para que nos salga los errores de una forma más clara */
+  /* se podría colocar async create().... y luego en el return colocar return await ..... para que nos salga los errores de una forma más clara y también es importante colocar el await para que, en pocas palabras, el error pueda suceder dentro de este servicio de create() y que no suceda fuera de create() ya que ahí se tendrían que hacer otras configuraciones para manejar el error */
   async create(createUserDto: CreateUserDto): Promise<User> {
     /* cuando la data ya llega a este punto es que ya tengo todo lo necesario para crear un usuario */
     // console.log(createUserDto);
     // return 'This action adds a new auth';
 
     try {
-      /* crear un nuevo usuario */
-      const newUser = new this.userModel(createUserDto);
+      /* hacer la desestructuración para obtener la contraseña para encriptarla y los demás datos están en ...userData */
+      const { password, ...userData } = createUserDto;
 
-      /* grabar el nuevo usuario donde save() es una promesa por eso coloca que el método create() regresará Promise<User> */
-      return await newUser.save();
+      /* crear un nuevo usuario encriptando la contraseña usando un hash de una sola vía para hacer imposible la reconstrucción del valor que se tiene al encriptar al valor plano de la contraseña como tal */
+      const newUser = new this.userModel({
+        password: bcryptjs.hashSync(password, 10),
+        ...userData,
+      });
+
+      /* grabar el nuevo usuario donde save() es una promesa por eso se coloca que el método create() regresará Promise<User>. Aquí es importante no mandarle datos de más al usuario en el objeto que se le envíe de nuevo en la respuesta del backend, por ejemplo, no mandarle la contraseña aunque de igual forma no se va a poder desencriptar pero sería bueno mandarle solo los datos necesarios en el objeto que se le mande al usuario en la respuesta del backend */
+      // return await newUser.save(); // se está grabando y retornando todo el newUser
+      await newUser.save(); // se está grabando todo el newUser pero abajo se retornará todo menos el password
+
+      /* aquí se está nombrando a password como _ ya que arriba también se tiene una constante llamada password y puede ser que choque con esa constante y por eso se re-nombra aquí. NOTA: se utiliza el toJSON() ya que un objeto puede proporcionar el método toJSON para convertirlo a JSON, es decir, es un método que permite personalizar la representación JSON de un objeto definiendo cómo debería ser convertido a JSON. Cuando toJSON está presente en un objeto, JSON.stringify lo utilizará para crear la cadena JSON. Además de esta manera se rompe la referencia en el newUser en caso de que algo más se fuera a ejecutar en nuestro controlador */
+      const { password: _, ...user } = newUser.toJSON();
+
+      /* aquí como solo se está retornando user entonces en la entidad de user.entity.ts hay que colocar a password como opcional para que pueda o no venir esta propiedad que en este caso no vendrá. Otra forma también se puede eliminar el password en la entidad de user.entity.ts para que nunca vaya pero de la forma en la que lo hicimos ahora es una forma relativamente fácil de hacerlo */
+      return user;
     } catch (error) {
       // console.log(error);
       if (error.code === 11000) {
