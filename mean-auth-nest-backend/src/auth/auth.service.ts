@@ -7,10 +7,12 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcryptjs from 'bcryptjs';
+import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { User } from './entities/user.entity';
 import { LoginDto } from './dto/login.dto';
+import { JwtPayload } from './interfaces/jwt-payload';
 
 /* nuesto auth.service.ts tendría que hacer todo el trabajo de crear usuarios, verificar el login, verificar el JWT (Json Web Token), etc., es decir, tener la lógica de negocio centralizada en este servicio y que nuestro controlador sea quien llame a estos métodos */
 @Injectable()
@@ -18,7 +20,9 @@ export class AuthService {
   /* inyectar nuestro modelo para poder trabajar con la base de datos. Una vez inyectado nuestro modelo ya podemos hacer las interacciones con la base de datos en relación a todo lo que se tenga definido al esquema/schema creado */
   constructor(
     /* aquí es una propiedad simple que es el userModel que tiene un decorador @InjectModel. Se puede colocar un nombre en el decorador como @InjectModel(User.name, 'users') pero también se puede quitar y hacerlo más simple con User.name */
-    @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(User.name)
+    private userModel: Model<User>,
+    private jwtService: JwtService,
   ) {}
 
   /* se podría colocar async create().... y luego en el return colocar return await ..... para que nos salga los errores de una forma más clara y también es importante colocar el await para que, en pocas palabras, el error pueda suceder dentro de este servicio de create() y que no suceda fuera de create() ya que ahí se tendrían que hacer otras configuraciones para manejar el error */
@@ -85,7 +89,7 @@ export class AuthService {
     /* FORMA 2: para tener agrupada las propiedades de userData en una propiedad user */
     return {
       user: userData,
-      token: 'ABC-123',
+      token: this.getJsonWebToken({ id: user.id }), // si se coloca user._id entonces es el id que viene de MongoDB que tiene Types.ObjectId y entonces mejor lo colocamos como user.id
     };
     // return 'All Success!!';
   }
@@ -104,5 +108,12 @@ export class AuthService {
 
   remove(id: number) {
     return `This action removes a #${id} auth`;
+  }
+
+  /* aquí el payload que se está recibiendo será la información que yo quiero grabar en mi JWT para poder reconstruir a mi usuario y para eso crearemos una interface */
+  getJsonWebToken(payload: JwtPayload) {
+    /* tomar el payload anterior y utilizarlo para hacer la firma del token */
+    const token = this.jwtService.sign(payload);
+    return token;
   }
 }
