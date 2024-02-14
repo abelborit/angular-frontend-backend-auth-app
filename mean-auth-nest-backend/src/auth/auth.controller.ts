@@ -6,12 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { AuthGuard } from './guards/auth.guard';
 
 /* los controladores que son los responsables de escuchar las peticiones que tenemos como GET, POST, PUT, PATCH, DELETE y emitir una respuesta */
 /* la url a utilizar aquí sería localhost:3000/auth */
@@ -45,6 +47,8 @@ export class AuthController {
     return this.authService.register(registerUserDto);
   }
 
+  /* usar el decorador @UseGuards(nombre del guard o de los guards) */
+  @UseGuards(AuthGuard)
   @Get()
   findAll() {
     return this.authService.findAll();

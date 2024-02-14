@@ -117,8 +117,9 @@ export class AuthService {
     // return 'All Success!!';
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  /* regresará todos los usuarios */
+  findAll(): Promise<User[]> {
+    return this.userModel.find();
   }
 
   findOne(id: number) {
