@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -47,10 +48,16 @@ export class AuthController {
     return this.authService.register(registerUserDto);
   }
 
-  /* usar el decorador @UseGuards(nombre del guard o de los guards) */
+  /* usar el decorador @UseGuards(nombre del guard o de los guards). Para obtener el id del usuario cuando pase por el AuthGuard se puede hacer de varias formas como por ejemplo, crear decoradores personalizados pero eso significa tener un poco más de conocimiento en Nest y para evitar eso entonces lo haremos de la forma tradicional usando el decorador @Request() luego se obtendrá la request de tipo Request, es decir @Request() request: Request */
   @UseGuards(AuthGuard)
   @Get()
-  findAll() {
+  findAll(@Request() request: Request) {
+    /* aquí tenemos la request por el lado del controlador y por algún lado de la request veremos que dice user: 'id del usuario' porque en el auth.guard.ts primero colocamos request['user'] = payload.id; que quiere decir que la request en la propiedad user sea el id que tenga el payload, entonces con eso podemos obtener ese id que viene en el token creando la constante user e igualando a lo que viene en la request en su propiedad user pero sería bueno que tengamos todo el usuario y no solo su id entonces para regresar toda la información del usuario tenemos que crear un nuevo método en el auth.service.ts que con el id del usuario que viene en el AuthGuard nos regrese toda la información del usuario como en la imagen 4.8 */
+    // console.log({ request });
+    // const user = request['user'];
+    // return user;
+
+    /* aquí se comentan las líneas anteriores ya que solo era para hacer un demostración para la validación del JWT y obtener un usuario pero la finalidad de esta función era obtener todos los usuarios. Lo que se puede hacer es que la lógica comentada la pasemos a otra función para obtener el usuario por id */
     return this.authService.findAll();
   }
 

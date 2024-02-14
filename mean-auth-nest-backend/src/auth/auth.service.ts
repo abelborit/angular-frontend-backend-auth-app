@@ -122,6 +122,14 @@ export class AuthService {
     return this.userModel.find();
   }
 
+  async findUserById(userId: string) {
+    /* este user tendrá toda la información del usuario, contraseña, datos, etc que puede ser que algunas cosas no nos interesen entonces se hará la desestructuración para tener solo lo que necesito */
+    const user = await this.userModel.findById(userId);
+    const { password: _, ...userInfo } = user.toJSON(); // el toJSON() para asegurarnos que no mande funciones que vienen dentro de ese modelo de userModel
+
+    return userInfo;
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} auth`;
   }

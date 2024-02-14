@@ -98,4 +98,6 @@
 
   - Crear guards en Nest es una tarea habitual entonces ya nos ofrece herramientas para trabajar como en su CLI ya nos ofrece un comando para crearlo `nest generate gu path/nombre` donde en este caso será `nest generate gu auth/guards/auth --flat` donde el --flat es para que cree el archivo del auth.guard.ts directamente en el directorio guards, es decir auth/guards/auth.guard.ts porque sino se coloca el --flat entonces crearía auth/guards/auth/auth.guard.ts y con eso haremos la configuración en el auth.guard.ts para poder usarlo en el controller o los controllers necesarios.
 
+  - Ahora que ya creamos el guard para la protección de rutas con autenticación y pudimos obtener el token, tenemos que validarlo contra el backend para saber que sí es válido y seguro y poder re-construir al usuario que lo está pidiendo basado en ese id.
+
 ### - Angular (Frontend)
