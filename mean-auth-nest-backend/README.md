@@ -29,6 +29,10 @@
 
   - La diferencia entre enviar datos en formato form-data y x-www-form-urlencoded radica en cómo se estructuran y envían los datos al servidor. Cuando se usa form-data, los datos se envían en un formato similar a un objeto FormData, lo que puede no activar ciertas validaciones de parámetros no existentes en el servidor. Por otro lado al usar x-www-form-urlencoded serializa los datos como una cadena codificada, lo que puede permitir al servidor aplicar las validaciones de parámetros de manera más efectiva. Las diferencias en la estructura de datos pueden llevar a que ciertas validaciones no se apliquen de la misma manera en ambos formatos, lo que podría explicar la disparidad y diferencia en la detección de parámetros no existentes.
 
+- ¿Por qué en el método create y checkToken se tiene que usar {id: user.\_id} como payload para generar el token pero en el método login se puede usar { id: user.id }
+
+  - La razón por la que se usa user.\_id en los métodos create y checkToken y user.id en el método login, es porque estamos llamando al método .toJSON() de las entidades de Mongoose. Cuando se llama a este método, Mongoose convierte automáticamente el \_id, que es un objeto ObjectId, a un string y lo almacena en la propiedad id. Por lo que, después de llamar a .toJSON() se puede acceder al ID del usuario tanto con user.\_id como con user.id.
+
 ---
 
 <p align="center">

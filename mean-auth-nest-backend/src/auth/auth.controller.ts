@@ -15,6 +15,8 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { AuthGuard } from './guards/auth.guard';
+import { LoginResponse } from './interfaces/login-response';
+import { User } from './entities/user.entity';
 
 /* los controladores que son los responsables de escuchar las peticiones que tenemos como GET, POST, PUT, PATCH, DELETE y emitir una respuesta */
 /* la url a utilizar aquí sería localhost:3000/auth */
@@ -61,18 +63,32 @@ export class AuthController {
     return this.authService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
+  /* en el frontend el checkToken se invocará cada vez que se recarga la página para renovar el token y no se hace solo con la duración del token, es decir, pasando la duración del token el usuario ya no pueda acceder a alguna rutas, porque por ejemplo, un usuario solo puede tener ciertos roles para acceder a una ruta o que no ha recargado la página en 5 horas y la duración del token es de 4 horas entonces en esos casos no se le permitiría el acceso al endpoint y por eso se hace uso del checkToken para que se vaya renovando */
+  @UseGuards(AuthGuard)
+  @Get('check-token')
+  checkToken(@Request() request: Request): LoginResponse {
+    /* se coloca como as User ya que la constante user la toma como si fuera tipo any */
+    const user = request['user'] as User;
+
+    return {
+      user: user,
+      token: this.authService.getJsonWebToken({ id: user._id }),
+    };
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
+  /* las comentamos porque no estamos usando estos métodos */
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.authService.findOne(+id);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
+  //   return this.authService.update(+id, updateAuthDto);
+  // }
+
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.authService.remove(+id);
+  // }
 }
