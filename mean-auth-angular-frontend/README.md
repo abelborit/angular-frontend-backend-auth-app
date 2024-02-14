@@ -1,3 +1,43 @@
+# Angular & TypeScript - Mean Auth Angular Frontend
+
+---
+
+# Temas puntuales de la sección
+
+### ¿Qué veremos en esta sección?
+
+Aquí conectaremos el Frontend (Angular) con el backend (Node + Nest) que hicimos anteriormente. También veremos:
+
+- Functional Guards
+- Manejo de autenticación
+- Señales (signals)
+- Efectos
+- Manejo de errores
+- SweetAlert
+- Determinar estado de autenticación
+- Manejo de JWTs
+- Headers de petición Http
+
+### \* PASOS A REALIZAR:
+
+1. ejemplo
+2. ejemplo
+3. ejemplo
+
+### \* RECURSOS A USAR:
+
+- ejemplo
+- ejemplo
+- ejemplo
+
+### \* NOTAS:
+
+- ejemplo
+- ejemplo
+- ejemplo
+
+---
+
 # MeanAuthAngularFrontend
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.0.
