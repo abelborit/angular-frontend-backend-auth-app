@@ -55,3 +55,13 @@ Normalmente, se suele utilizar el término URL para hacer referencia a las direc
   REVISAR: https://www.hostinger.es/tutoriales/uri-vs-url
   REVISAR: https://danielmiessler.com/p/difference-between-uri-url/
 */
+
+/*
+PREGUNTA: ¿Cómo funciona el pipe map()?
+
+RESPUESTA: El pipe map() de RxJs es parecido a cómo funciona el .map() en un array en JavaScript, como por dar un ejemplo de similitud. Realmente el pipe map() nos devuelve un parámetro que es el valor que tenemos en ese momento, y que podemos usar para modificarlo/transformarlo. En el código, realmente la propia data que tenemos nos es indiferente a la hora de devolverla, ya que toda la lógica que necesitamos la realizamos en el tap y ahí ya guardamos y asignamos la información. En este caso usamos el map para que la respuesta que devolvamos del método handleLogin, una vez se resuelva, sea el valor true para indicar que todo funcionó correctamente, ya que es la lógica que estamos implementando.
+
+Ahora, el map como lo usamos aquí, se puede usar para devolver simplemente lo que uno quiera sin tener en cuenta el valor que tenemos en ese momento como estamos haciendo ahora que si pasó el tap y no obtuvo ningún error, simplemente estamos indicando que handleLogin() devuelva un valor true.
+
+En resumen, el operador map() nos devuelve un parámetro con el valor actual en ese momento, que podemos usar o no, y eso será lo que retornará nuestro observable. Realmente si no usamos el parámetro que nos proporciona el map, se puede devolver cualquier otra data, pero tiene que tener sentido para la lógica que estamos implementando.
+*/

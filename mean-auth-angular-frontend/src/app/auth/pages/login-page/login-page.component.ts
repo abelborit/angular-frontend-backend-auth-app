@@ -21,6 +21,7 @@ export class LoginPageComponent {
     const { email, password } = this.myForm.value;
 
     this.authService.handleLogin(email, password).subscribe((response) => {
+      /* el observable al suscribirnos devolvería un true si todo está bien */
       console.log({ response });
     });
   }
