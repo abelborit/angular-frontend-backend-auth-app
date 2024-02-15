@@ -31,7 +31,12 @@ Aquí conectaremos el Frontend (Angular) con el backend (Node + Nest) que hicimo
 
 - dotenv: https://www.npmjs.com/package/dotenv
   - `npm i -D dotenv`
-- ejemplo
+- sweetalert2: https://sweetalert2.github.io/
+  - Usando npm: `npm install sweetalert2`
+  - Usando CDN:
+    ```html
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    ```
 - ejemplo
 
 ### \* NOTAS:

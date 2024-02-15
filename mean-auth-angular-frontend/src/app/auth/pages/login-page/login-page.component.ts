@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -20,9 +21,30 @@ export class LoginPageComponent {
     // console.log(this.myForm.value);
     const { email, password } = this.myForm.value;
 
-    this.authService.handleLogin(email, password).subscribe((response) => {
-      /* el observable al suscribirnos devolvería un true si todo está bien */
-      console.log({ response });
+    /* para manejar los errores entonces lo haremos con dos propiedades que tiene el subscribe, "next" si todo salió bien y "error" si algo salió mal */
+    this.authService.handleLogin(email, password).subscribe({
+      next: (loginResponse) => {
+        // console.log({ loginResponse });
+        Swal.fire({
+          icon: 'success',
+          title: 'Correct Credentials',
+          text: 'Redirecting to home page...',
+          timer: 2000,
+          timerProgressBar: true,
+        });
+      },
+      error: (loginError) => {
+        // console.log({ loginError });
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: `${
+            loginError === 401
+              ? 'Email or password is wrong'
+              : 'Something with server is wrong'
+          }`,
+        });
+      },
     });
   }
 }
