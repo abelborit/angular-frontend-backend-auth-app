@@ -6,6 +6,7 @@ import {
   AuthStatus,
   CheckTokenResponse,
   LoginResponse,
+  RegisterResponse,
   User,
 } from '../interfaces';
 
@@ -45,7 +46,7 @@ export class AuthService {
     const body = { email, password }; // el body que se mandará en el método Post al backend
 
     /* esta petición será de tipo LoginResponse que es lo que nos devuelve el backend al hacer la petición */
-    /* si todo sale bien entonces primero se hará un tap() que es un efecto secundario que ahora lo usaremos para actualizar algunas propiedades. Luego usaremos un map() para cambiar el valor ya que el login nos pide retornar un observable que emita un boolean, entonces se puede colocar map(() => true) o map((httpResponse) => true) por si se quiere conocer o usar el httpResponse */
+    /* si todo sale bien entonces primero se hará un tap() que es un efecto secundario que ahora lo usaremos para actualizar algunas propiedades. Luego usaremos un map() para cambiar el valor ya que el handleLogin nos pide retornar un observable que emita un boolean, entonces se puede colocar map(() => true) o map((httpResponse) => true) por si se quiere conocer o usar el httpResponse */
     return this.httpClient.post<LoginResponse>(url, body).pipe(
       /* aquí se está haciendo primero un tap() para asignar la data de la respuesta HTTP y luego un map() para retornar un true que es lo que pide la función handleLogin */
       // tap((httpResponse) => {
@@ -62,6 +63,37 @@ export class AuthService {
       catchError((httpError) => {
         // console.log({ httpError });
         /* aquí se podría devolver un "return of(false)" ya que la función handleLogin nos pide que retornemos un observable que emite un boolean pero nosotros no queremos regresar solo un false sino que queremos regresar el error con su información para que al momento de suscribirnos podamos hacer un error controlado. Se pensaría que se puede colocar Observable<boolean | string> para que si todo sale bien entonces retorne un boolean pero si hay algún error entonces podamos devolver un string pero no lo haremos así porque lo que usaremos será el throwError() que es una función que tiene una función la cual nos retorna lo que salió mal al hacer la petición */
+        return throwError(() => httpError.error.statusCode);
+      })
+    );
+  }
+
+  handleRegister(
+    name: string,
+    email: string,
+    password: string
+  ): Observable<boolean> {
+    const url = `${this.baseUrl}/auth/register`;
+    const body = { name, email, password }; // el body que se mandará en el método Post al backend
+
+    /* esta petición será de tipo RegisterResponse que es lo que nos devuelve el backend al hacer la petición */
+    /* si todo sale bien entonces primero se hará un tap() que es un efecto secundario que ahora lo usaremos para actualizar algunas propiedades. Luego usaremos un map() para cambiar el valor ya que el handleRegister nos pide retornar un observable que emita un boolean, entonces se puede colocar map(() => true) o map((httpResponse) => true) por si se quiere conocer o usar el httpResponse */
+    return this.httpClient.post<RegisterResponse>(url, body).pipe(
+      /* aquí se está haciendo primero un tap() para asignar la data de la respuesta HTTP y luego un map() para retornar un true que es lo que pide la función RegisterResponse */
+      // tap((httpResponse) => {
+      //   // console.log({ httpResponse });
+      //   this._currentUser.set(httpResponse.user);
+      //   this._authStatus.set(AuthStatus.authenticated);
+      //   localStorage.setItem('userToken', httpResponse.token);
+      // }),
+      // map(() => true),
+      /* aquí se está usando un map() para poder retornar algo. Se está usando la función setUserAndAuthStatus que recibirá el usuario y el token y ahí se hará la asignación de la data de la respuesta HTTP y también retornará un valor boolean */
+      map((httpResponse) => {
+        return this.setUserAndAuthStatus(httpResponse.user, httpResponse.token);
+      }),
+      catchError((httpError) => {
+        console.log({ httpError });
+        /* aquí se podría devolver un "return of(false)" ya que la función RegisterResponse nos pide que retornemos un observable que emite un boolean pero nosotros no queremos regresar solo un false sino que queremos regresar el error con su información para que al momento de suscribirnos podamos hacer un error controlado. Se pensaría que se puede colocar Observable<boolean | string> para que si todo sale bien entonces retorne un boolean pero si hay algún error entonces podamos devolver un string pero no lo haremos así porque lo que usaremos será el throwError() que es una función que tiene una función la cual nos retorna lo que salió mal al hacer la petición */
         return throwError(() => httpError.error.statusCode);
       })
     );
