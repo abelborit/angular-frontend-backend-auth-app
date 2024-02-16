@@ -28,16 +28,13 @@ export class LoginPageComponent {
       next: (loginResponse) => {
         // console.log({ loginResponse });
         /* al final se coloca el then() para que cuando acabe el timer del sweetalert2 me pueda redirigir a la página de dashboard */
-        // Swal.fire({
-        //   icon: 'success',
-        //   title: 'Correct Credentials',
-        //   text: 'Redirecting to home page...',
-        //   timer: 1500,
-        //   timerProgressBar: true,
-        //   showConfirmButton: false,
-        // }).then(() => this.router.navigateByUrl('/dashboard'));
-
-        this.router.navigateByUrl('/dashboard');
+        Swal.fire({
+          icon: 'success',
+          title: 'Correct Credentials',
+          timer: 1000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        }).then(() => this.router.navigateByUrl('/dashboard'));
       },
       error: (loginError) => {
         // console.log({ loginError });

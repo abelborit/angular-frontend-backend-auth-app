@@ -1,4 +1,9 @@
-<form class="login100-form" [formGroup]="myForm" (ngSubmit)="handleLogin()">
+<form
+  class="login100-form"
+  autocomplete="off"
+  [formGroup]="myForm"
+  (ngSubmit)="handleLogin()"
+>
   <span class="login100-form-title p-b-49">Login</span>
 
   <div class="wrap-input100 m-b-23">
