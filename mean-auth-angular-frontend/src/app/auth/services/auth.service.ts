@@ -1,8 +1,13 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map, tap, throwError } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 import { environments } from 'src/environments/environments';
-import { AuthStatus, LoginResponse, User } from '../interfaces';
+import {
+  AuthStatus,
+  CheckTokenResponse,
+  LoginResponse,
+  User,
+} from '../interfaces';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -32,17 +37,40 @@ export class AuthService {
     return this.httpClient.post<LoginResponse>(url, body).pipe(
       tap((httpResponse) => {
         // console.log({ httpResponse });
-
         this._currentUser.set(httpResponse.user);
         this._authStatus.set(AuthStatus.authenticated);
         localStorage.setItem('userToken', httpResponse.token);
       }),
       map(() => true),
       catchError((httpError) => {
-        console.log({ httpError });
-
+        // console.log({ httpError });
         /* aquí se podría devolver un "return of(false)" ya que la función handleLogin nos pide que retornemos un observable que emite un boolean pero nosotros no queremos regresar solo un false sino que queremos regresar el error con su información para que al momento de suscribirnos podamos hacer un error controlado. Se pensaría que se puede colocar Observable<boolean | string> para que si todo sale bien entonces retorne un boolean pero si hay algún error entonces podamos devolver un string pero no lo haremos así porque lo que usaremos será el throwError() que es una función que tiene una función la cual nos retorna lo que salió mal al hacer la petición */
         return throwError(() => httpError.error.statusCode);
+      })
+    );
+  }
+
+  handleCheckAuthStatus(): Observable<boolean> {
+    const url = `${this.baseUrl}/auth/check-token`;
+    const token = localStorage.getItem('userToken');
+
+    if (!token) return of(false);
+
+    /* agregar en los headers el token para que el backend lo verifique */
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.httpClient.get<CheckTokenResponse>(url, { headers }).pipe(
+      tap((httpResponse) => {
+        // console.log({ httpResponse });
+        this._currentUser.set(httpResponse.user);
+        this._authStatus.set(AuthStatus.authenticated);
+        localStorage.setItem('userToken', httpResponse.token);
+      }),
+      map(() => true),
+      catchError((httpError) => {
+        // console.log({ httpError });
+        this._authStatus.set(AuthStatus.notAuthenticated);
+        return of(false);
       })
     );
   }
