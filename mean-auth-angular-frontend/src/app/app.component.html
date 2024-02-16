@@ -2,4 +2,7 @@
 <!-- <router-outlet></router-outlet> -->
 
 <!-- FORMA 2 -->
-<router-outlet />
+<!-- aquí se podría hacer de otra forma con un ng-template para que aparezca un elemento u otro usando el ngIf else para mejorar el rendimiento ya que con dos validaciones de lo mismo entonces Angular realizará más validaciones por su ciclo de detección de componentes y puede afectar el performance -->
+<h1 *ngIf="!finishedAuthCheck()">Loading...</h1>
+
+<router-outlet *ngIf="finishedAuthCheck()" />

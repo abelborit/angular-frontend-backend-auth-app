@@ -26,7 +26,10 @@ export class AuthService {
   public currentUser = computed(() => this._currentUser());
   public authStatus = computed(() => this._authStatus());
 
-  constructor() {}
+  constructor() {
+    /* cada que se crea el servicio entonces mandamos a llamar a handleCheckAuthStatus el cual su funcionalidad es validar si hay un token o no hay token en el localStorage y si hay token entonces será enviado mediante los headers en su petición al backend y este backend nos regresará un nuevo token y de esa forma vamos a estar refrescando el token para poder hacer una sesión que se mantenga en el tiempo hasta hacer un logout o hasta que la validación del token se termine */
+    this.handleCheckAuthStatus().subscribe();
+  }
 
   /* aquí se hará esta función ya que se estaba repitiendo código y se hará de forma privada ya que esta función no saldrá de este servicio. Aquí se implementará el principio de DRY (Don't Repeat Your self) para evitar la duplicidad de código */
   private setUserAndAuthStatus(user: User, token: string): boolean {
@@ -70,7 +73,7 @@ export class AuthService {
 
     if (!token) return of(false);
 
-    /* agregar en los headers el token para que el backend lo verifique */
+    /* si hay token entonces agregar el token en los headers para que el backend lo verifique */
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     return this.httpClient.get<CheckTokenResponse>(url, { headers }).pipe(
