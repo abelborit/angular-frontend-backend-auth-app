@@ -2,7 +2,14 @@
 
 ---
 
-### - Nest (Backend)
+### - Tecnologías usadas:
+
+- #### Angular (Frontend)
+- #### Nest (Backend)
+
+---
+
+### - Algunas explicaciones sobre nuestro backend con Nest
 
 - https://nestjs.com/
 
@@ -100,4 +107,38 @@
 
   - Ahora que ya creamos el guard para la protección de rutas con autenticación y pudimos obtener el token, tenemos que validarlo contra el backend para saber que sí es válido y seguro y poder re-construir al usuario que lo está pidiendo basado en ese id.
 
-### - Angular (Frontend)
+---
+
+### - Despliegues a producción
+
+- Veremos como podemos hacer un despligue de nuestra aplicación a producción para nuestro Backend (Nest) + Frontend (Angular) + Base de Datos (MongoDB) en la nube el cual usaremos un servicio llamado Railway que nos permitirá tomar nuestra aplicación de Nest, también podemos aprovisionar nuestra base de datos ahí. Hay otras alternativas como por ejemplo Mongo Atlas para la base de datos, etc.
+
+- Puntualmente veremos:
+
+  - Aprovisionamiento de base de datos MongoDB
+  - Railway (https://railway.app/)
+  - MongoAltas (https://www.mongodb.com/atlas/database)
+  - Variables de entorno para producción
+  - Hash Strategy
+  - Publicar aplicación de Node (Nest)
+  - Publicar aplicación de Angular
+  - Seleccionar bases de datos
+  - Pruebas reales.
+
+- Vamos a aprovisionar nuestra base de datos MongoDB en Railway pero recordar que hay varios servicios gratuitos hasta cierto punto que nos permiten aprovisionar la base de datos MongoDB como MongoAltas pero en este caso lo haremos con Railway que también es gratuito hasta cierto punto.
+
+  - Mongo Atlas: (https://www.youtube.com/watch?v=P1G2YRPczh4&ab_channel=MongoDB) (https://www.youtube.com/watch?v=RcxdF3Lzoac&t=118s&ab_channel=CalebCurry)
+
+    - Iniciar sesión o crear cuenta
+    - Hacer click en Build a Database
+    - Hacer la configuración para deployar la base de datos (forma gratuita), colocar el nombre de nuestra base de datos y crear la base de datos
+    - Una vez que la base de datos se haya creado y esté todo cargado correctamente nos aparecerá una opción para conectar, entonces haremos click y nos dará una url similar a la que colocamos en el .env de nuestro backend en MONGO_URI y lo tendremos que reemplazar y ya tendríamos nuestra base de datos desplegada.
+
+  - Railway:
+    - (imagen 2) Click en la forma gratuita y nos pedirá que iniciemos sesión (recomendable hacerlo con cuenta de GitHub para tener una comunicación fácil con los repositorios) y luego nos llevará a un dashboard para crear un nuevo proyecto (imagen 3)
+    - (imagen 4) Crear un nuevo proyecto -> Provision MongoDB
+    - (imagen 5) Luego se creará una base de datos MongoDB pero con las configuraciones por defecto y eso es lo que necesitaremos en este caso
+    - (imagen 6) Hacer click en el elemento que nos aparece de MongoDB y nos mostrará una interfaz gráfica y en la pestaña Data vemos que nos creó una base de datos de prueba llamada test pero nosotros crearemos una nueva base de datos con un mejor nombre y luego presionamos en Add database (imagen 7) y veremos nuestra base de datos creada (imagen 8)
+    - (imagen 9) Luego en la pestaña Connect veremos que tenemos algunas formas de conectarnos a la base de datos donde ahí está la cadena de conexión que usaremos para conectarnos a nuestra base de datos. Abajo también podemos ver que nos da variables de entorno privadas como MONGO_URL, MONGOHOST, MONGOPASSWORD, MONGOPORT (puerto personalizado, no es el puerto por defecto de Mongo), MONGOUSER (imagen 10)
+    - (imagen 11) Podemos ir a Mongo Compass en nuestro equipo y conectarnos usando esa cadena de conexión y luego nos conectamos y con eso ya estaríamos conectados a Railway (imagen 12)
+    - (imagen 13) Luego hacer click en settings y cambiaremos el nombre del proyecto como tal (imagen 14) porque ahí también podemos agregar más servicios y funcionalidades al dashboard que tenemos ahí. Podemos ver el nuevo nombre si vamos al dashboard administrativo global (imagen 15)
