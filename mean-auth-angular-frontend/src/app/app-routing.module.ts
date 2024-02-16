@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { isAuthenticatedGuard } from './auth/guards/is-authenticated.guard';
 import { isNotAuthenticatedGuard } from './auth/guards/is-not-authenticated.guard';
 
+/* NOTA: para el nombre los guards sería mejor colocarlos como PublicGuard y PrivateGuard o similares en lugar tener nombres positivos (isAuthenticatedGuard) y negativos (isNotAuthenticatedGuard) */
 const routes: Routes = [
   {
     path: 'auth',

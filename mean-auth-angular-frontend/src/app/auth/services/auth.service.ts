@@ -67,11 +67,24 @@ export class AuthService {
     );
   }
 
+  handleLogout() {
+    localStorage.removeItem('userToken');
+    this._currentUser.set(null);
+    this._authStatus.set(AuthStatus.notAuthenticated);
+  }
+
   handleCheckAuthStatus(): Observable<boolean> {
     const url = `${this.baseUrl}/auth/check-token`;
     const token = localStorage.getItem('userToken');
 
-    if (!token) return of(false);
+    if (!token) {
+      /* FORMA 1: se puede cambiar el estado directamente a no autenticado */
+      // this._authStatus.set(AuthStatus.notAuthenticated);
+
+      /* FORMA 2: al tener el método handleLogout entonces se podría llamar directamente a ese método para reutilizar lógica que ya hay y hacer una mejor limpieza de los datos */
+      this.handleLogout();
+      return of(false);
+    }
 
     /* si hay token entonces agregar el token en los headers para que el backend lo verifique */
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);

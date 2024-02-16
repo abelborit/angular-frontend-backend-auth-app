@@ -3,3 +3,16 @@
 
 <h3>User</h3>
 <pre>{{ currentUser() | json }}</pre>
+
+<br />
+<button
+  (click)="handleLogout()"
+  style="
+    border: 2px solid #d00;
+    border-radius: 5px;
+    padding: 6px 14px;
+    color: #d00;
+  "
+>
+  Logout
+</button>
