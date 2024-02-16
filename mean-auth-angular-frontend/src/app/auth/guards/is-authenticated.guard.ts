@@ -17,9 +17,10 @@ export const isAuthenticatedGuard: CanActivateFn = (route, state) => {
 
     Entonces al hacer esta validación y que nos retorne un false podemos mantenernos en la ruta de dashboard al refrescar la página de dashboard si estamos logueados, pero si al final de cuentas pasa del authStatus de checking al authStatus de notAuthenticated entonces nos redireccionará sí o sí al /auth/login
   */
-  if (authService.authStatus() === AuthStatus.checking) {
-    return false;
-  }
+  /* al final de cuentas ya no sería necesario usar esta validación */
+  // if (authService.authStatus() === AuthStatus.checking) {
+  //   return false;
+  // }
 
   /* si el authStatus es authenticated entonces nos retornará un true */
   if (authService.authStatus() === AuthStatus.authenticated) {
