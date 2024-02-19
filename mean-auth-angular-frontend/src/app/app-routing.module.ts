@@ -29,6 +29,7 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
+  /* Una alterniva al hash si se está usando Netlify es creando y configurando un archivo _redirects: https://stackoverflow.com/questions/51887581/angular-routing-not-working-on-netlify-on-page-refresh */
   /* para que no se tenga problemas al hacer algún deploy, por ejemplo, en GitHub Pages en este caso, porque la primera vez que se entra a la página desplegada que nos da GitHub Pages carga todo normal pero cuando se refresca entonces aparece un 404 Not Found propio de GitHub Pages */
   providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
 })
