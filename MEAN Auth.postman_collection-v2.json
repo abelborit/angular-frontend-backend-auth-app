@@ -1,0 +1,125 @@
+{
+	"info": {
+		"_postman_id": "0be7f82f-8b00-44f1-9bfe-bac9e34d5ba9",
+		"name": "MEAN Auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "25203359"
+	},
+	"item": [
+		{
+			"name": "localhost:3000/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:3000/"
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Get All Users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1Y2I5ZjM0NzAwNWExYzQyYTMyY2IxMiIsImlhdCI6MTcwNzkyOTY3NSwiZXhwIjoxNzA3OTUxMjc1fQ.U0J5PR4rq7cqFqZyrf72cLgCRMIw5B5XLC9Zi-WiQXs"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "localhost:3000/auth"
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Nombre",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "correo2@correo.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text"
+						}
+					]
+				},
+				"url": "localhost:3000/auth"
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Login User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "correo2@correo.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text"
+						}
+					]
+				},
+				"url": "localhost:3000/auth/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Register User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Nombre 100",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "correo1234@correo.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text"
+						}
+					]
+				},
+				"url": "localhost:3000/auth/register"
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Check Token",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:3000/auth/check-token"
+			},
+			"response": []
+		}
+	]
+}
